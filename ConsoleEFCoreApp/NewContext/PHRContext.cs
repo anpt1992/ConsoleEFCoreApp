@@ -293,7 +293,7 @@ namespace ConsoleEFCoreApp.NewContext
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.AreaCalc).HasColumnType("int(11)");
+                entity.Property(e => e.AreaCalc).HasColumnType("float(11,0)");
 
                 entity.Property(e => e.CategoryId).HasColumnType("int(11)");
 

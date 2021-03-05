@@ -24,5 +24,7 @@ namespace ConsoleEFCoreApp.PM_Models
         public string CreatedBy { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime DeletedAt { get; set; }
+
+        public virtual Address Address { get; set; }
     }
 }

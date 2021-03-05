@@ -20,7 +20,7 @@ namespace ConsoleEFCoreApp.PHR_Models
         public int WardId { get; set; }
         public int DistrictId { get; set; }
         public string Area { get; set; }
-        public int AreaCalc { get; set; }
+        public float AreaCalc { get; set; }
         public int StructureId { get; set; }
         public int AdvertiseId { get; set; }
         public int CategoryId { get; set; }

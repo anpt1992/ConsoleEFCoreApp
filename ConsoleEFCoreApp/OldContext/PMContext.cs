@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using ConsoleEFCoreApp.PM_Models;
-using Type = ConsoleEFCoreApp.PM_Models.Type;
 
 #nullable disable
 
@@ -40,9 +39,8 @@ namespace ConsoleEFCoreApp.OldContext
         public virtual DbSet<Street> Streets { get; set; }
         public virtual DbSet<Structure> Structures { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
-      
         public virtual DbSet<Throttle> Throttles { get; set; }
-        public virtual DbSet<Type> Types { get; set; }
+        public virtual DbSet<PM_Models.Type> Types { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Ward> Wards { get; set; }
 
@@ -51,7 +49,7 @@ namespace ConsoleEFCoreApp.OldContext
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseLazyLoadingProxies().UseMySql("server=localhost;database=product_manager;user=root;treattinyasboolean=true;ConvertZeroDateTime=True ", Microsoft.EntityFrameworkCore.ServerVersion.FromString("10.4.11-mariadb"));
+                optionsBuilder.UseLazyLoadingProxies().UseMySql("server=localhost;database=product_manager;user=root;treattinyasboolean=true;convert zero datetime=True", Microsoft.EntityFrameworkCore.ServerVersion.FromString("10.4.11-mariadb"));
             }
         }
 
@@ -326,7 +324,6 @@ namespace ConsoleEFCoreApp.OldContext
                     .IsRequired()
                     .HasColumnType("text")
                     .HasColumnName("detail")
-                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -334,7 +331,6 @@ namespace ConsoleEFCoreApp.OldContext
                     .IsRequired()
                     .HasColumnType("text")
                     .HasColumnName("images")
-                    .HasDefaultValueSql("''")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -561,6 +557,8 @@ namespace ConsoleEFCoreApp.OldContext
             {
                 entity.ToTable("products");
 
+                entity.HasIndex(e => e.AddressId, "address");
+
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
                     .HasColumnName("id");
@@ -642,6 +640,12 @@ namespace ConsoleEFCoreApp.OldContext
                 entity.Property(e => e.UpdatedAt)
                     .HasColumnType("datetime")
                     .HasColumnName("updated_at");
+
+                entity.HasOne(d => d.Address)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.AddressId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("address");
             });
 
             modelBuilder.Entity<Project>(entity =>
@@ -893,7 +897,6 @@ namespace ConsoleEFCoreApp.OldContext
                     .HasColumnName("updated_at");
             });
 
-            
             modelBuilder.Entity<Throttle>(entity =>
             {
                 entity.ToTable("throttle");
@@ -930,7 +933,7 @@ namespace ConsoleEFCoreApp.OldContext
                     .HasColumnName("user_id");
             });
 
-            modelBuilder.Entity<Type>(entity =>
+            modelBuilder.Entity<PM_Models.Type>(entity =>
             {
                 entity.ToTable("types");
 

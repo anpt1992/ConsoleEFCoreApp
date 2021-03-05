@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ConsoleEFCoreApp.NewContext;
 using ConsoleEFCoreApp.OldContext;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,12 +17,29 @@ namespace ConsoleEFCoreApp
                 cfg.CreateMap<PM_Models.Type, PHR_Models.Category>();
                 cfg.CreateMap<PM_Models.Direction, PHR_Models.Direction>();
                 cfg.CreateMap<PM_Models.District, PHR_Models.District>();
-                cfg.CreateMap<PM_Models.Product, PHR_Models.Product>();
                 cfg.CreateMap<PM_Models.Status, PHR_Models.Status>();
                 cfg.CreateMap<PM_Models.Street, PHR_Models.Street>();
                 cfg.CreateMap<PM_Models.Structure, PHR_Models.Structure>();
                 cfg.CreateMap<PM_Models.Task, PHR_Models.Task>();
                 cfg.CreateMap<PM_Models.Ward, PHR_Models.Ward>();
+
+                cfg.CreateMap<PM_Models.Product, PHR_Models.Product>().ForMember
+                (
+                    x => x.DistrictId,
+                    option => option.MapFrom(k => k.Address.DistrictId)
+                ).ForMember
+                (
+                    x => x.WardId,
+                    option => option.MapFrom(k => k.Address.WardId)
+                ).ForMember
+                (
+                    x => x.StreetId,
+                    option => option.MapFrom(k => k.Address.StreetId)
+                ).ForMember
+                (
+                    x => x.AreaCalc,
+                    option => option.MapFrom(k => Convert.ToSingle(k.AreaCalc))
+                );
             });
             IMapper mapper = config.CreateMapper();
 
@@ -29,7 +47,7 @@ namespace ConsoleEFCoreApp
             List<PM_Models.Advertise> PM_advertise = null;
             List<PM_Models.Type> PM_type = null;
             List<PM_Models.Direction> PM_direction = null;
-            List<PM_Models.District> PM_district = null;           
+            List<PM_Models.District> PM_district = null;
             List<PM_Models.Status> PM_status = null;
             List<PM_Models.Street> PM_street = null;
             List<PM_Models.Structure> PM_structure = null;
@@ -40,7 +58,7 @@ namespace ConsoleEFCoreApp
                 PM_advertise = context.Advertises.ToList();
                 PM_type = context.Types.ToList();
                 PM_direction = context.Directions.ToList();
-                PM_district = context.Districts.ToList();            
+                PM_district = context.Districts.ToList();
                 PM_status = context.Statuses.ToList();
                 PM_street = context.Streets.ToList();
                 PM_structure = context.Structures.ToList();
@@ -135,6 +153,12 @@ namespace ConsoleEFCoreApp
             using (var context = new PMContext())
             {
                 List<PM_Models.Product> PM_product = context.Products.ToList();
+
+                //foreach(var k in PM_product)
+                //{
+                //    var y = Convert.ToSingle(k.AreaCalc);
+                //    Console.WriteLine(y);
+                //}
 
                 var PHR_product = mapper.Map<List<PHR_Models.Product>>(PM_product);
 
