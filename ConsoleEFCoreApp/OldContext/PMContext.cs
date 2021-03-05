@@ -40,7 +40,7 @@ namespace ConsoleEFCoreApp.OldContext
         public virtual DbSet<Street> Streets { get; set; }
         public virtual DbSet<Structure> Structures { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
-        public virtual DbSet<Task3> Task3s { get; set; }
+      
         public virtual DbSet<Throttle> Throttles { get; set; }
         public virtual DbSet<Type> Types { get; set; }
         public virtual DbSet<User> Users { get; set; }
@@ -51,7 +51,7 @@ namespace ConsoleEFCoreApp.OldContext
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseMySql("server=localhost;database=product_manager;user=root;treattinyasboolean=true", Microsoft.EntityFrameworkCore.ServerVersion.FromString("10.4.11-mariadb"));
+                optionsBuilder.UseLazyLoadingProxies().UseMySql("server=localhost;database=product_manager;user=root;treattinyasboolean=true;ConvertZeroDateTime=True ", Microsoft.EntityFrameworkCore.ServerVersion.FromString("10.4.11-mariadb"));
             }
         }
 
@@ -893,21 +893,7 @@ namespace ConsoleEFCoreApp.OldContext
                     .HasColumnName("updated_at");
             });
 
-            modelBuilder.Entity<Task3>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.ToView("task3");
-
-                entity.Property(e => e.MaxNId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("MAX(n.id)");
-
-                entity.Property(e => e.ProductId)
-                    .HasColumnType("int(11)")
-                    .HasColumnName("product_id");
-            });
-
+            
             modelBuilder.Entity<Throttle>(entity =>
             {
                 entity.ToTable("throttle");

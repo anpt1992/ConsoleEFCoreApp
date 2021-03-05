@@ -52,7 +52,7 @@ namespace ConsoleEFCoreApp.NewContext
                 entity.Property(e => e.Id).HasColumnType("int(11)");
 
                 entity.Property(e => e.Email)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -62,7 +62,7 @@ namespace ConsoleEFCoreApp.NewContext
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Gender)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(20)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -77,7 +77,7 @@ namespace ConsoleEFCoreApp.NewContext
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Role)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(20)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
             });
@@ -89,9 +89,9 @@ namespace ConsoleEFCoreApp.NewContext
                 entity.Property(e => e.Id).HasColumnType("int(11)");
 
                 entity.Property(e => e.Name)
-                    .HasColumnType("longtext")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                    .HasColumnType("varchar(100)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<Category>(entity =>
@@ -113,9 +113,9 @@ namespace ConsoleEFCoreApp.NewContext
                 entity.Property(e => e.Id).HasColumnType("int(11)");
 
                 entity.Property(e => e.Name)
-                    .HasColumnType("longtext")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                    .HasColumnType("varchar(100)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
             });
 
             modelBuilder.Entity<District>(entity =>
@@ -235,17 +235,26 @@ namespace ConsoleEFCoreApp.NewContext
             {
                 entity.ToTable("price");
 
+                entity.HasIndex(e => e.CreatedBy, "IX_Price_CreatedBy");
+
                 entity.HasIndex(e => e.ProductId, "IX_Price_ProductId");
 
-                entity.Property(e => e.Id).HasColumnType("int(11)");
+                entity.Property(e => e.Id).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.CreatedAt)
                     .HasMaxLength(6)
                     .HasDefaultValueSql("current_timestamp(6)");
 
+                entity.Property(e => e.CreatedBy).HasColumnType("int(11)");
+
                 entity.Property(e => e.ProductId).HasColumnType("bigint(20)");
 
                 entity.Property(e => e.Value).HasColumnType("bigint(20)");
+
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.Prices)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .HasConstraintName("FK_Price_Account_CreatedBy");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Prices)
@@ -280,29 +289,26 @@ namespace ConsoleEFCoreApp.NewContext
                 entity.Property(e => e.AdvertiseId).HasColumnType("int(11)");
 
                 entity.Property(e => e.Area)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.AreaCalc)
-                    .HasColumnType("longtext")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                entity.Property(e => e.AreaCalc).HasColumnType("int(11)");
 
                 entity.Property(e => e.CategoryId).HasColumnType("int(11)");
 
                 entity.Property(e => e.Code)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(20)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.ContactName)
-                    .HasColumnType("longtext")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_general_ci");
+                    .HasColumnType("varchar(255)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ContactPhone)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(20)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 
@@ -322,7 +328,7 @@ namespace ConsoleEFCoreApp.NewContext
                     .HasCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.HouseNumber)
-                    .HasColumnType("longtext")
+                    .HasColumnType("varchar(255)")
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_general_ci");
 

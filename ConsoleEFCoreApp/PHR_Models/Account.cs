@@ -10,6 +10,7 @@ namespace ConsoleEFCoreApp.PHR_Models
         public Account()
         {
             Notes = new HashSet<Note>();
+            Prices = new HashSet<Price>();
             Products = new HashSet<Product>();
         }
 
@@ -23,6 +24,7 @@ namespace ConsoleEFCoreApp.PHR_Models
         public bool IsDeleted { get; set; }
 
         public virtual ICollection<Note> Notes { get; set; }
+        public virtual ICollection<Price> Prices { get; set; }
         public virtual ICollection<Product> Products { get; set; }
     }
 }
